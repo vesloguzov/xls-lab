@@ -11,8 +11,8 @@ from openpyxl.chart.layout import Layout, ManualLayout
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-wb2 = load_workbook('pie.xlsx (7).xlsx')
-ws = wb2['Sheet']
+wb2 = load_workbook('labWork10.xlsx')
+ws = wb2['Фильтр']
 
 print type(ws.merged_cell_ranges[0])
 
@@ -21,16 +21,19 @@ print type(ws.merged_cell_ranges[0])
 #
 # cells = []
 # for title, coord in dests:
-#     cells.append(ws[coord])
-# print cells
-print "D7: ", ws['D20'].value
-print "D7: ", ws['D20'].coordinate
-print "D7: ", ws['D20'].column
-print "D7: ", ws['D20'].base_date
-print "D7: ", ws['D20'].guess_types
-print "D7: ", ws['D20'].internal_value
-print "D7: ", ws['D20'].is_date
-print "D7: ", ws['D20'].number_format
+
+print ws.auto_filter.ref
+
+interesCell = 'G4'
+
+print "D7: ", ws[interesCell].value
+print "D7: ", ws[interesCell].coordinate
+print "D7: ", ws[interesCell].column
+print "D7: ", ws[interesCell].base_date
+print "D7: ", ws[interesCell].guess_types
+print "D7: ", ws[interesCell].internal_value
+print "D7: ", ws[interesCell].is_date
+print "D7: ", ws[interesCell].number_format
 
 # print "B7: ", ws['B7'].value
 # print "B7: ", ws['B7'].coordinate
