@@ -11,8 +11,8 @@ from openpyxl.chart.layout import Layout, ManualLayout
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-wb2 = load_workbook('data/rabota 8.xlsx')
-ws = wb2[wb2.get_sheet_names()[0]]
+# wb2 = load_workbook('lab1_template.xlsx')
+# ws = wb2[wb2.get_sheet_names()[0]]
 
 # print ws._charts
 # print wb2.get_sheet_names()
@@ -57,7 +57,18 @@ def range_is_money_format(range):
                 return False
     return True
 
-print range_is_money_format('F3:F6')
+def print_range(range):
+    rows = ws[range]
+    for row in rows:
+        for cell in row:
+            print cell.coordinate, cell.value
+
+wb2 = load_workbook('lab1_template.xlsx')
+ws = wb2[wb2.get_sheet_names()[0]]
+
+print_range('F5:F11')
+
+# print range_is_money_format('E5:F11')
 
 # print "D7: ", ws['F3'].number_format
 # print "D7: ", ws['F4'].number_format
@@ -65,4 +76,4 @@ print range_is_money_format('F3:F6')
 #
 # print "D7: ", ws['F6'].number_format
 
-# первый столбоц ширина 30
+#  data_only=True
