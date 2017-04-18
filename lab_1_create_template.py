@@ -44,7 +44,7 @@ def create_template(ws, employees, positions):
     random.shuffle(shuffle_employees)
 
     ws.column_dimensions["A"].width = 5.0
-    ws.column_dimensions["B"].width = 15.0
+    ws.column_dimensions["B"].width = 28.0
     ws.column_dimensions["C"].width = 16.0
     ws.column_dimensions["D"].width = 18.0
     ws.column_dimensions["E"].width = 18.0
@@ -71,10 +71,16 @@ def create_template(ws, employees, positions):
                 ws.cell(row=pos_i, column=j).value = randomDate()
                 ws.cell(row=pos_i, column=j).number_format = 'YYYY.MM.DD'
 
-    ws.cell(row=len(employees)+7, column=2).value = "Курс доллара"
-    ws.cell(row=len(employees) + 7, column=2).alignment = Alignment(horizontal="center", vertical="center")
+    set_border_and_fill(ws, str(ws.cell(row=len(employees)+7, column=2).coordinate)+":"+str(ws.cell(row=len(employees)+10, column=3).coordinate), fill=PatternFill("solid", fgColor="DDDDDD") )
+    ws.cell(row=len(employees) + 7, column=2).value = "Курс доллара: "
     ws.cell(row=len(employees) + 7, column=3).value = round(random.uniform(30, 60), 1)
-    ws.cell(row=len(employees) + 7, column=3).alignment = Alignment(horizontal="center", vertical="center")
+
+    ws.cell(row=len(employees) + 8, column=2).value = "Средняя зарплата, руб:"
+
+    ws.cell(row=len(employees) + 9, column=2).value = "Максимальная зарплата, руб:"
+    ws.cell(row=len(employees) + 10, column=2).value = "Минимальная зарплата, руб:"
+
+
 
     ws = set_border_and_fill(ws, 'A4:I11')
     ws = set_border_and_fill(ws, 'G12:I12')
