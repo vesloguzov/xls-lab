@@ -57,16 +57,148 @@ def range_is_money_format(range):
                 return False
     return True
 
+def range_values_array(ws, range):
+    arr = []
+    rows = ws[range]
+    for row in rows:
+        for cell in row:
+            arr.append(cell.value)
+    return arr
+
+def range_values_array_numeric(ws, range):
+    arr = []
+    rows = ws[range]
+    for row in rows:
+        for cell in row:
+            arr.append(float(cell.value))
+    return arr
+
 def print_range(range):
     rows = ws[range]
     for row in rows:
         for cell in row:
             print cell.coordinate, cell.value
 
+
+def calculate_correct_values(range, dollar_rate):
+    data = {}
+    rows = ws[range]
+    values = []
+    for row in rows:
+        for cell in row:
+            values.append(float(cell.value))
+    data["salary"] = {"values": values}
+
+    premium = []
+    total = []
+    income_tax = []
+    amount_granted = []
+    amount_granted_dollar = []
+
+    for v in data["salary"]["values"]:
+        premium_val = v * 0.2
+        premium.append(premium_val)
+        total_val = premium_val + v
+        total.append(total_val)
+        income_tax_val = round(total_val*0.13, 2)
+        income_tax.append(income_tax_val)
+        amount_granted_val = (total_val - income_tax_val)
+        amount_granted.append(amount_granted_val)
+        amount_granted_dollar_val = round(amount_granted_val/dollar_rate, 2)
+        amount_granted_dollar.append(amount_granted_dollar_val)
+
+    data["premium"] = {"values": premium}
+    data["total"] = {"values": total}
+    data["total_sum"] = sum(total)
+    data["income_tax"] = {"values": income_tax}
+    data["income_tax_sum"] = sum(income_tax)
+    data["amount_granted"] = {"values": amount_granted}
+    data["amount_granted_sum"] = sum(amount_granted)
+    data["amount_granted_dollar"] = {"values": amount_granted_dollar}
+    data["amount_granted_dollar_sum"] = sum(amount_granted_dollar)
+    data["avg_salary"] = round(reduce(lambda x, y: x + y, amount_granted) / len(amount_granted), 2)
+    data["min_salary"] = round(min(amount_granted), 2)
+    data["max_salary"] = round(max(amount_granted), 2)
+    return data
+
+
+def get_students_formulas_values(ws, s, e, ws_data_only):
+    data = {}
+    data["names"] = range_values_array(ws, 'B'+str(s)+':'+'B'+str(e))
+    salary =  range_values_array_numeric(ws, 'E'+str(s)+':'+'E'+str(e))
+    data["salary"] = {"values": salary}
+    premium =  range_values_array(ws, 'F'+str(s)+':'+'F'+str(e))
+    data["premium"] = {}
+    data["premium"]["formula"] = premium
+    total =  range_values_array(ws, 'G'+str(s)+':'+'G'+str(e))
+    data["total"] = {}
+    data["total"]["formula"] =  total
+    income_tax =  range_values_array(ws, 'H'+str(s)+':'+'H'+str(e))
+    data["income_tax"] = {}
+    data["income_tax"]["formula"] =  income_tax
+    amount_granted =  range_values_array(ws, 'I'+str(s)+':'+'I'+str(e))
+    data["amount_granted"] = {}
+    data["amount_granted"]["formula"] = amount_granted
+    amount_granted_dollar =  range_values_array(ws, 'J'+str(s)+':'+'J'+str(e))
+    data["amount_granted_dollar"] = {}
+    data["amount_granted_dollar"]["formula"] =  amount_granted_dollar
+
+    data["avg_salary"] = {}
+    data["max_salary"] = {}
+    data["min_salary"] = {}
+
+    data["avg_salary"]["value"] = round(float(ws_data_only['C'+ str(e + 4)].value), 2)
+    data["max_salary"]["value"] = round(float(ws_data_only['C'+ str(e + 5)].value), 2)
+    data["min_salary"]["value"] = round(float(ws_data_only['C'+ str(e + 6)].value), 2)
+
+    data["avg_salary"]["formula"] = ws['C'+ str(e + 4)].value
+    data["max_salary"]["formula"] = ws['C'+ str(e + 5)].value
+    data["min_salary"]["formula"] = ws['C'+ str(e + 6)].value
+
+    # data only
+    premium = range_values_array_numeric(ws_data_only, 'F' + str(s) + ':' + 'F' + str(e))
+    data["premium"]["values"]= premium
+    total = range_values_array_numeric(ws_data_only, 'G' + str(s) + ':' + 'G' + str(e))
+    data["total"]["values"] =  total
+    income_tax = range_values_array_numeric(ws_data_only, 'H' + str(s) + ':' + 'H' + str(e))
+    data["income_tax"]["values"] = income_tax
+    amount_granted = range_values_array_numeric(ws_data_only, 'I' + str(s) + ':' + 'I' + str(e))
+    data["amount_granted"]["values"] = amount_granted
+    amount_granted_dollar = range_values_array_numeric(ws_data_only, 'J' + str(s) + ':' + 'J' + str(e))
+    data["amount_granted_dollar"]["values"] = amount_granted_dollar
+
+    return data
+
+
 wb2 = load_workbook('lab1_template.xlsx')
 ws = wb2[wb2.get_sheet_names()[0]]
 
-print_range('F5:F11')
+wb2_read_only = load_workbook('lab1_template.xlsx', data_only=True)
+ws_read_only = wb2_read_only[wb2_read_only.get_sheet_names()[0]]
+
+
+employees = ["Иванов И.М.", "Коробова П.Н", "Морозов И.Р.", "Ромашова П.Т.", "Петров Г.Т.", "Смирнов С.И.", "Соколова О.С."]
+
+start_row = 5
+end_row = start_row + len(employees) - 1
+range_salary = 'E5:E'+ str(end_row)
+dollar_rate = 48
+# print range_salary
+
+correct_values_data = {}
+correct_values_data = calculate_correct_values(range_salary, dollar_rate)
+
+student_values_data = {}
+student_values_data = get_students_formulas_values(ws, start_row, end_row, ws_read_only)
+
+print student_values_data
+
+
+
+
+
+
+# print_range('F5:F11')
 
 # print range_is_money_format('E5:F11')
 
