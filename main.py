@@ -125,23 +125,51 @@ def calculate_correct_values(range, dollar_rate):
 def get_students_formulas_values(ws, s, e, ws_data_only):
     data = {}
     data["names"] = range_values_array(ws, 'B'+str(s)+':'+'B'+str(e))
+
     salary =  range_values_array_numeric(ws, 'E'+str(s)+':'+'E'+str(e))
     data["salary"] = {"values": salary}
+
     premium =  range_values_array(ws, 'F'+str(s)+':'+'F'+str(e))
     data["premium"] = {}
     data["premium"]["formula"] = premium
+    premium = range_values_array_numeric(ws_data_only, 'F' + str(s) + ':' + 'F' + str(e))
+    data["premium"]["values"]= premium
+
     total =  range_values_array(ws, 'G'+str(s)+':'+'G'+str(e))
     data["total"] = {}
+    data["total_sum"] = {}
     data["total"]["formula"] =  total
+    total = range_values_array_numeric(ws_data_only, 'G' + str(s) + ':' + 'G' + str(e))
+    data["total"]["values"] = total
+    data["total_sum"]["values"] = round(float(ws_data_only['G' + str(e + 1)].value), 2)
+    data["total_sum"]["formula"] = ws['G' + str(e + 1)].value
+
     income_tax =  range_values_array(ws, 'H'+str(s)+':'+'H'+str(e))
     data["income_tax"] = {}
+    data["income_tax_sum"] = {}
     data["income_tax"]["formula"] =  income_tax
+    income_tax = range_values_array_numeric(ws_data_only, 'H' + str(s) + ':' + 'H' + str(e))
+    data["income_tax"]["values"] = income_tax
+    data["income_tax_sum"]["values"] = round(float(ws_data_only['H' + str(e + 1)].value), 2)
+    data["income_tax_sum"]["formula"] = ws['H' + str(e + 1)].value
+
     amount_granted =  range_values_array(ws, 'I'+str(s)+':'+'I'+str(e))
     data["amount_granted"] = {}
+    data["amount_granted_sum"] = {}
     data["amount_granted"]["formula"] = amount_granted
+    amount_granted = range_values_array_numeric(ws_data_only, 'I' + str(s) + ':' + 'I' + str(e))
+    data["amount_granted"]["values"] = amount_granted
+    data["amount_granted_sum"]["values"] = round(float(ws_data_only['I' + str(e + 1)].value), 2)
+    data["amount_granted_sum"]["formula"] = ws['I' + str(e + 1)].value
+
     amount_granted_dollar =  range_values_array(ws, 'J'+str(s)+':'+'J'+str(e))
     data["amount_granted_dollar"] = {}
+    data["amount_granted_dollar_sum"] = {}
     data["amount_granted_dollar"]["formula"] =  amount_granted_dollar
+    amount_granted_dollar = range_values_array_numeric(ws_data_only, 'J' + str(s) + ':' + 'J' + str(e))
+    data["amount_granted_dollar"]["values"] = amount_granted_dollar
+    data["amount_granted_dollar_sum"]["values"] = round(float(ws_data_only['J' + str(e + 1)].value), 2)
+    data["amount_granted_dollar_sum"]["formula"] = ws['J' + str(e + 1)].value
 
     data["avg_salary"] = {}
     data["max_salary"] = {}
@@ -154,18 +182,6 @@ def get_students_formulas_values(ws, s, e, ws_data_only):
     data["avg_salary"]["formula"] = ws['C'+ str(e + 4)].value
     data["max_salary"]["formula"] = ws['C'+ str(e + 5)].value
     data["min_salary"]["formula"] = ws['C'+ str(e + 6)].value
-
-    # data only
-    premium = range_values_array_numeric(ws_data_only, 'F' + str(s) + ':' + 'F' + str(e))
-    data["premium"]["values"]= premium
-    total = range_values_array_numeric(ws_data_only, 'G' + str(s) + ':' + 'G' + str(e))
-    data["total"]["values"] =  total
-    income_tax = range_values_array_numeric(ws_data_only, 'H' + str(s) + ':' + 'H' + str(e))
-    data["income_tax"]["values"] = income_tax
-    amount_granted = range_values_array_numeric(ws_data_only, 'I' + str(s) + ':' + 'I' + str(e))
-    data["amount_granted"]["values"] = amount_granted
-    amount_granted_dollar = range_values_array_numeric(ws_data_only, 'J' + str(s) + ':' + 'J' + str(e))
-    data["amount_granted_dollar"]["values"] = amount_granted_dollar
 
     return data
 
