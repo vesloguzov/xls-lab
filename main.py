@@ -23,12 +23,5 @@ positions = ["Директор", "Менеджер", "Бухгалтер", "За
 ws = create_template(ws, employees, positions)
 wb.save('lab1_template.xlsx')
 
-
-
-print ws.cell(row=7+7, column=2).coordinate
-
-# print "D7: ", ws[interesCell].value
-# print "D7: ", ws[interesCell].coordinate
-# print "D7: ", ws[interesCell].column
-
 print 'saved'
+
