@@ -14,38 +14,28 @@ sys.setdefaultencoding('utf8')
 wb2 = load_workbook('data/rabota 8.xlsx')
 ws = wb2[wb2.get_sheet_names()[0]]
 
-print ws._charts
-# print wb2.get_sheet_names()
-# print type(ws.auto_filter.ref)
-# # print ws.auto_filter
-# first_cell = ws.auto_filter.ref.split(':')[0]
-# cell_date_filter = ''
-# cell_cost_filter = ''
-# print ws[first_cell].row
-# for Colfilter in ws.auto_filter.filterColumn:
-#     if Colfilter.filters is not None:
-#         cell_date_filter = ws[first_cell].column + str(Colfilter.colId)
-#         print cell_date_filter
-#         for Colfilter2 in Colfilter.filters.dateGroupItem:
-#             print Colfilter2.year
-#     print Colfilter.colId #относительно ws.auto_filter.ref
-#     if Colfilter.customFilters is not None:
-#         # print Colfilter.colId
-#         for Colfilter1 in Colfilter.customFilters.customFilter:
-#             print Colfilter1.operator+": "+Colfilter1.val
-#             pass
+print "LOL"
+print ws.sheet_view
 
 
-# interesCell = 'G4'
-#
-# print "D7: ", ws[interesCell].value
-# print "D7: ", ws[interesCell].coordinate
-# print "D7: ", ws[interesCell].column
-# print "D7: ", ws[interesCell].base_date
-# print "D7: ", ws[interesCell].guess_types
-# print "D7: ", ws[interesCell].internal_value
-# print "D7: ", ws[interesCell].is_date
-# print "D7: ", ws[interesCell].number_format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 l = reader('''<?xml version="1.0" encoding="UTF-8"?>
@@ -542,7 +532,7 @@ l = reader('''<?xml version="1.0" encoding="UTF-8"?>
 # for p in l.title.tx.rich.p:
 #     print p.text.t
 
-for s in l.ser:
-    # print s.xVal.numRef.numCache # Значения числовые
-    print s.xVal.numRef.f # Диапозон данных
-    print s.yVal.numRef.f
+# for s in l.ser:
+#     # print s.xVal.numRef.numCache # Значения числовые
+#     print s.xVal.numRef.f # Диапозон данных
+#     print s.yVal.numRef.f
