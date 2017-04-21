@@ -22,7 +22,7 @@ employees = ["Иванов И.М.", "Коробова П.Н", "Морозов И
 
 
 positions = ["Директор", "Менеджер", "Бухгалтер", "Зам. директора", "Секетарь", "Водитель", "Строитель"]
-dollar_rate = round(random.uniform(30, 60), 1)
+dollar_rate = 48 #round(random.uniform(30, 60), 1)
 template_ws = create_template(template_ws, employees, positions, dollar_rate)
 template_wb.save('lab1_template.xlsx')
 
