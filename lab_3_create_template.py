@@ -27,25 +27,27 @@ def set_border_and_fill(ws, cell_range, fill=None):
     return ws
 
 def set_table_header(ws, headers_names):
-    ws['B2'] = 'Поступление товаров'
-    ws.merge_cells('B2:G2')
-    ws['B2'].alignment = Alignment(horizontal="center", vertical="center")
-    ws = set_border_and_fill(ws, 'B4:G4', fill=PatternFill("solid", fgColor="DDDDDD"))
+    ws['A1'] = 'Поступление товаров'
+    ws.merge_cells('A1:F1')
+    ws['A1'].alignment = Alignment(horizontal="center", vertical="center")
+    ws = set_border_and_fill(ws, 'A2:F2', fill=PatternFill("solid", fgColor="DDDDDD"))
     for i in range(1, len(headers_names)+1):
-        ws.cell(row=4, column=i+1).value = headers_names[i-1]
+        ws.cell(row=2, column=i).value = headers_names[i-1]
 
     return ws
 
+
+
 def create_template(ws, data):
 
-    ws.column_dimensions["B"].width = 5.0
-    ws.column_dimensions["C"].width = 21.0
-    ws.column_dimensions["D"].width = 18.0
+    ws.column_dimensions["A"].width = 5.0
+    ws.column_dimensions["B"].width = 21.0
+    ws.column_dimensions["C"].width = 18.0
+    ws.column_dimensions["D"].width = 12.0
     ws.column_dimensions["E"].width = 12.0
-    ws.column_dimensions["F"].width = 12.0
-    ws.column_dimensions["G"].width = 14.0
+    ws.column_dimensions["F"].width = 14.0
 
-    ws.row_dimensions[4].height = 27
+    ws.row_dimensions[2].height = 27
 
     shuffle_data = list(data)
     random.shuffle(shuffle_data)
@@ -54,23 +56,22 @@ def create_template(ws, data):
 
     for i in range(1, len(shuffle_data)+1):
         for j in range(1, len(headers_names)+1):
-            pos_i = i + 4
+            pos_i = i + 2
             ws.cell(row=pos_i, column=j).alignment = Alignment(horizontal="center", vertical="center")
-            if j == 2:
+            if j == 1:
                 ws.cell(row=pos_i, column=j).value = i
-            if j == 3:
+            if j == 2:
                 ws.cell(row=pos_i, column=j).value = shuffle_data[i-1][0]
-            if j == 4:
-
+            if j == 3:
                 ws.cell(row=pos_i, column=j).value = datetime.datetime.strptime(shuffle_data[i-1][1], "%d.%m.%Y")
-                ws.cell(row=pos_i, column=j).number_format = 'MM/DD/YYYY'
-            if j == 5:
+                ws.cell(row=pos_i, column=j).number_format = 'DD/MM/YY'
+            if j == 4:
                 ws.cell(row=pos_i, column=j).value = shuffle_data[i-1][2]
-            if j == 6:
+            if j == 5:
                 ws.cell(row=pos_i, column=j).value = shuffle_data[i-1][3]
-            if j == 7:
-                ws.cell(row=pos_i, column=j).value = shuffle_data[i-1][4]
+            # if j == 7:
+            #     ws.cell(row=pos_i, column=j).value = shuffle_data[i-1][4]
 
-    set_border_and_fill(ws, 'B5:G19')
+    set_border_and_fill(ws, 'A3:F17')
 
     return ws
