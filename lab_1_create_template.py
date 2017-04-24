@@ -64,11 +64,12 @@ def create_template(ws, employees, positions, dollar_rate):
             if j==1:
                 ws.cell(row=pos_i, column=j).value = i
             if j == 2:
-                ws.cell(row=pos_i, column=j).value = employees[i-1]
+                ws.cell(row=pos_i, column=j).value = shuffle_employees[i-1]
             if j == 3:
                 ws.cell(row=pos_i, column=j).value = random.choice(positions)
             if j == 4:
                 ws.cell(row=pos_i, column=j).value = randomDate()
+                ws.cell(row=pos_i, column=j).number_format = 'DD/MM/YY'
                 # ws.cell(row=pos_i, column=j).number_format = 'YYYY.MM.DD'
 
     set_border_and_fill(ws, str(ws.cell(row=len(employees)+7, column=2).coordinate)+":"+str(ws.cell(row=len(employees)+10, column=3).coordinate), fill=PatternFill("solid", fgColor="DDDDDD") )

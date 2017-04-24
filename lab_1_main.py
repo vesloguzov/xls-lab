@@ -28,8 +28,8 @@ template_wb.save('lab1_template.xlsx')
 
 
 # Проверка
-student_wb =  load_workbook('lab1_correct.xlsx')
-student_wb_data_only =  load_workbook('lab1_correct.xlsx', data_only=True)
+student_wb =  load_workbook('lab1_student.xlsx')
+student_wb_data_only =  load_workbook('lab1_student.xlsx', data_only=True)
 
 result = check_answer(student_wb, student_wb_data_only, employees, dollar_rate)
 

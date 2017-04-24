@@ -5,65 +5,9 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.chart import ScatterChart, Series, Reference
 from openpyxl.chart.reader import reader
 from openpyxl.chart.layout import Layout, ManualLayout
-# import xlsxwriter
-# import xlwings as xw
-
+from utils import range_is_date_format, range_is_money_rub_format, range_is_money_dollar_format, formulas_is_equal
 reload(sys)
 sys.setdefaultencoding('utf8')
-
-# wb2 = load_workbook('lab1_template.xlsx')
-# ws = wb2[wb2.get_sheet_names()[0]]
-
-# print ws._charts
-# print wb2.get_sheet_names()
-# print type(ws.auto_filter.ref)
-# # print ws.auto_filter
-# first_cell = ws.auto_filter.ref.split(':')[0]
-# cell_date_filter = ''
-# cell_cost_filter = ''
-# print ws[first_cell].row
-# for Colfilter in ws.auto_filter.filterColumn:
-#     if Colfilter.filters is not None:
-#         cell_date_filter = ws[first_cell].column + str(Colfilter.colId)
-#         print cell_date_filter
-#         for Colfilter2 in Colfilter.filters.dateGroupItem:
-#             print Colfilter2.year
-#     print Colfilter.colId #относительно ws.auto_filter.ref
-#     if Colfilter.customFilters is not None:
-#         # print Colfilter.colId
-#         for Colfilter1 in Colfilter.customFilters.customFilter:
-#             print Colfilter1.operator+": "+Colfilter1.val
-#             pass
-
-
-
-def string_is_money_format(str):
-    if '₽' in str:
-        return True
-    if '£' in str:
-        return True
-    if '$' in str:
-        return True
-    if '€' in str:
-        return True
-    return False
-
-
-def range_is_money_rub_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not '₽' in cell.number_format:
-                return {'status': False, 'message': 'Money rub format invalid'}
-    return {'status': True, 'message': 'Money rub format valid'}
-
-def range_is_money_dollar_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not '$' in cell.number_format:
-                return {'status': False, 'message': 'Money dollar format invalid'}
-    return {'status': True, 'message': 'Money dollar format valid'}
 
 def range_is_formula_format(ws, range):
     rows = ws[range]
@@ -72,14 +16,6 @@ def range_is_formula_format(ws, range):
             if str(cell.value)[0] != '=':
                 return False
     return True
-
-def range_is_date_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not cell.is_date:
-                return {'status': False, 'message': 'Dates invalid'}
-    return {'status': True, 'message': 'Dates valid'}
 
 def range_values_array(ws, range):
     arr = []
@@ -140,7 +76,7 @@ def calculate_correct_values(ws, range, employees, dollar_rate):
             amount_granted.append(amount_granted_val)
             amount_granted_formula.append('=G'+str(index+5)+'-H'+str(index+5))
 
-            amount_granted_dollar_val = round(amount_granted_val/dollar_rate, 3)
+            amount_granted_dollar_val = round(amount_granted_val/dollar_rate, 1)
             amount_granted_dollar.append(amount_granted_dollar_val)
             amount_granted_dollar_formula.append('=I'+str(index+5)+'/$C$14')
 
@@ -160,7 +96,6 @@ def calculate_correct_values(ws, range, employees, dollar_rate):
         return data
     except:
         return False
-
 
 def get_range_data(ws, range, ws_data_only):
     try:
@@ -201,7 +136,6 @@ def check_formats(student_ws):
     # Проверяем правильность форматирования суммы к выдаче в долларах
     print "Формат суммы к выдаче в долларах: ", range_is_money_dollar_format(student_ws, 'J5:J11')['status']
 
-
 def formulas_arrays_is_equal(f1, f2):
     clean_f1 = []
     clean_f2 = []
@@ -211,16 +145,6 @@ def formulas_arrays_is_equal(f1, f2):
         clean_f2.append(f.replace(" ", "").lower().replace(".", ","))
 
     return clean_f1 == clean_f2
-
-def formulas_is_equal(f1, f2):
-    if f1 and f2:
-        f1 = f1.replace(" ", "").lower().replace(".", ",")
-        f2 = f2.replace(" ", "").lower().replace(".", ",")
-
-        return f1 == f2
-
-    else: return False
-
 
 def check_formulas(ws, ws_read_only, correct_data):
 
@@ -345,20 +269,15 @@ def check_ws_have_rule(ws, cells_range, operator, formula_value):
         if cells_range == rule[0]:
             if operator == rule[1][0].operator:
                 if int(rule[1][0].formula[0]) == formula_value:
-                    print 'Условное форматирование выполнено: True'
-    print 'Условное форматирование выполнено: False'
-
-
+                    return True
+    return False
 
 def check_answer(student_wb, student_wb_data_only, employees, dollar_rate):
+
     student_ws = student_wb[student_wb.get_sheet_names()[0]]
     ws_read_only = student_wb_data_only[student_wb_data_only.get_sheet_names()[0]]
 
-    start_row = 5
-    end_row = start_row + len(employees) - 1
-    range_salary = 'E5:E11'
-
-    correct_values_data = calculate_correct_values(student_ws, range_salary, sorted(employees), dollar_rate)
+    correct_values_data = calculate_correct_values(student_ws, 'E5:E11', sorted(employees), dollar_rate)
 
     if correct_values_data:
         print 'Столбец окладов заполенен'
@@ -372,6 +291,6 @@ def check_answer(student_wb, student_wb_data_only, employees, dollar_rate):
         check_functions(student_ws, ws_read_only, correct_values_data)
 
         # Проверем правильность условного форматирования
-        check_ws_have_rule(student_ws, 'I5:I11', 'lessThan', 5000)
+        print 'Условное форматирование выполнено:', check_ws_have_rule(student_ws, 'I5:I11', 'lessThan', 5500)
     else:
         message = 'Неверно заполнен столбец "Оклад"'
