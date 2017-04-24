@@ -38,9 +38,21 @@ def create_table_ws_1(ws):
     ws = set_border_and_fill(ws, 'A3:B3', fill=PatternFill("solid", fgColor="DDDDDD"))
     ws = set_border_and_fill(ws, 'A4:B28', None)
 
+def create_table_ws_2(ws):
+    ws.column_dimensions["A"].width = 17
+    ws.column_dimensions["B"].width = 17
+    ws['A1'] = 'График функции '
+    ws.merge_cells('A1:B2')
+    ws['A1'].alignment = Alignment(horizontal="center", vertical="center")
+    ws['A3'].value = 'y'
+    ws['B3'].value = 'y=y'
+    ws = set_border_and_fill(ws, 'A3:B3', fill=PatternFill("solid", fgColor="DDDDDD"))
+    ws = set_border_and_fill(ws, 'A4:B34', None)
+
 def create_template(wb):
     ws1 = wb.active
     ws1.title = "Лист 1".decode('utf8')
     ws2 = wb.create_sheet(title="Лист 2".decode('utf8'))
     create_table_ws_1(ws1)
+    create_table_ws_2(ws2)
     return wb

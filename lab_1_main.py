@@ -3,6 +3,7 @@ import sys
 import random
 import datetime
 import time
+import json
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.chart import ScatterChart, Series, Reference
@@ -33,4 +34,4 @@ student_wb_data_only =  load_workbook('lab1_student.xlsx', data_only=True)
 
 result = check_answer(student_wb, student_wb_data_only, employees, dollar_rate)
 
-
+print result

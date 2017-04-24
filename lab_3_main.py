@@ -2,6 +2,7 @@
 import sys
 import random
 import datetime
+import json
 
 from openpyxl import Workbook, load_workbook
 from openpyxl import Workbook, load_workbook
@@ -47,7 +48,7 @@ student_wb_data_only =  load_workbook('lab3_correct.xlsx', data_only=True)
 
 result = check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data)
 
-
+print json.dumps(result)
 
 
 

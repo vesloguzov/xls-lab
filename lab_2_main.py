@@ -15,17 +15,17 @@ sys.setdefaultencoding('utf8')
 
 
 
-template_wb = Workbook()
-
-
-template_wb = create_template(template_wb)
-template_wb.save('lab2_template.xlsx')
-
-print 'created'
-
-# correct_wb = load_workbook('lab2_correct.xlsx')
-# correct_wb_data_only =  load_workbook('lab2_correct.xlsx', data_only=True)
+# template_wb = Workbook()
 #
+#
+# template_wb = create_template(template_wb)
+# template_wb.save('lab2_template.xlsx')
+#
+# print 'created'
+
+correct_wb = load_workbook('lab2_correct.xlsx')
+correct_wb_data_only =  load_workbook('lab2_correct.xlsx', data_only=True)
+
 # # Проверка
 # student_wb =  load_workbook('lab2_student.xlsx')
 # student_wb_data_only =  load_workbook('lab2_correct.xlsx', data_only=True)
