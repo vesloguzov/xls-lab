@@ -6,7 +6,7 @@ import time
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import *
-
+from openpyxl.drawing.image import Image
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -33,7 +33,7 @@ def create_table_ws_1(ws):
     ws['A1'] = 'График функции y=sin(x)'
     ws.merge_cells('A1:B2')
     ws['A1'].alignment = Alignment(horizontal="center", vertical="center")
-    ws['A3'].value = 'y'
+    ws['A3'].value = 'x'
     ws['B3'].value = 'y=sin(x)'
     ws = set_border_and_fill(ws, 'A3:B3', fill=PatternFill("solid", fgColor="DDDDDD"))
     ws = set_border_and_fill(ws, 'A4:B28', None)
@@ -44,10 +44,15 @@ def create_table_ws_2(ws):
     ws['A1'] = 'График функции '
     ws.merge_cells('A1:B2')
     ws['A1'].alignment = Alignment(horizontal="center", vertical="center")
-    ws['A3'].value = 'y'
-    ws['B3'].value = 'y=y'
+    ws['A3'].value = 'x'
+    ws['B3'].value = 'y'
     ws = set_border_and_fill(ws, 'A3:B3', fill=PatternFill("solid", fgColor="DDDDDD"))
     ws = set_border_and_fill(ws, 'A4:B34', None)
+
+    img = Image('lab_2_equation.png')
+    ws.add_image(img, 'C1')
+    ws.row_dimensions[1].height = 22.5
+    ws.row_dimensions[2].height = 22.5
 
 def create_template(wb):
     ws1 = wb.active

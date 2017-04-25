@@ -6,8 +6,7 @@ import time
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import *
-from lab_1_utils import randomDate
-
+from utils import randomDate
 
 reload(sys)
 sys.setdefaultencoding('utf8')
