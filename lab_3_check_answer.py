@@ -5,7 +5,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.chart import ScatterChart, Series, Reference
 from openpyxl.chart.reader import reader
 from openpyxl.chart.layout import Layout, ManualLayout
-from utils import range_is_date_format, range_is_money_rub_format, formulas_is_equal
+from labs_utils import range_is_date_format, range_is_money_rub_format, formulas_is_equal
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -141,7 +141,7 @@ def check_filters(correct_ws, student_ws):
         response_message["filters"]["custom"]["status"] = False
 
 
-def check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data):
+def lab_3_check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data):
 
     if (len(student_wb.get_sheet_names()) == 3):
         student_ws_1 = student_wb[student_wb.get_sheet_names()[0]]

@@ -38,7 +38,7 @@ def set_table_header(ws, headers_names):
 
 
 
-def create_template(ws, data):
+def lab_3_create_template(ws, data):
 
     ws.column_dimensions["A"].width = 5.0
     ws.column_dimensions["B"].width = 21.0

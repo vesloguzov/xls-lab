@@ -1,59 +1,51 @@
-# -*- coding: UTF-8 -*-
-import sys
-import random
-import datetime
-import time
+#-*- coding: utf-8 -*-
+import os
+import pkg_resources
 
-from openpyxl import Workbook, load_workbook
-from openpyxl.chart import ScatterChart, Series, Reference
-from openpyxl.chart.reader import reader
-from openpyxl.chart.layout import Layout, ManualLayout
+from django.template import Context, Template
+from django.utils.encoding import smart_text
 
-reload(sys)
-sys.setdefaultencoding('utf8')
 
-def range_is_date_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not cell.is_date:
-                return {'status': False, 'message': 'Dates invalid'}
-    return {'status': True, 'message': 'Dates valid'}
+def load_resource(resource_path):
+        """
+        Gets the content of a resource
+        """
+        try:
+            resource_content = pkg_resources.resource_string(__name__, resource_path)
+            return smart_text(resource_content)
+        except EnvironmentError:
+            pass
 
-def range_is_money_rub_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not '₽' in cell.number_format:
-                return {'status': False, 'message': 'Money rub format invalid'}
-    return {'status': True, 'message': 'Money rub format valid'}
 
-def range_is_money_dollar_format(ws, range):
-    rows = ws[range]
-    for row in rows:
-        for cell in row:
-            if not '$' in cell.number_format:
-                return {'status': False, 'message': 'Money dollar format invalid'}
-    return {'status': True, 'message': 'Money dollar format valid'}
+def load_resources(js_urls, css_urls, fragment):
+    """
+    Загрузка локальных статических ресурсов.
+    """
+    for js_url in js_urls:
 
-def formulas_is_equal(f1, f2):
-    if f1 and f2:
-        f1 = f1.replace(" ", "").lower().replace(".", ",")
-        f2 = f2.replace(" ", "").lower().replace(".", ",")
+        if js_url.startswith('public/'):
+            fragment.add_javascript_url(self.runtime.local_resource_url(self, js_url))
+        elif js_url.startswith('static/'):
+            fragment.add_javascript(load_resource(js_url))
+        else:
+            pass
 
-        return f1 == f2
+    for css_url in css_urls:
 
-    else: return False
+        if css_url.startswith('public/'):
+            fragment.add_css_url(self.runtime.local_resource_url(self, css_url))
+        elif css_url.startswith('static/'):
+            fragment.add_css(load_resource(css_url))
+        else:
+            pass
 
-def strTimeProp(start, end, format, prop):
-    stime = time.mktime(time.strptime(start, format))
-    etime = time.mktime(time.strptime(end, format))
-    ptime = stime + prop * (etime - stime)
-    return time.strftime(format, time.localtime(ptime))
+def render_template(template_path, context=None):
+    """
+    Evaluate a template by resource path, applying the provided context.
+    """
+    if context is None:
+        context = {}
 
-startDate = "01.01.2000"
-endDate = "01.01.2018"
-
-def randomDate(start=startDate, end=endDate):
-    prop = random.random()
-    return strTimeProp(start, end, '%d.%m.%Y', prop)
+    template_str = load_resource(template_path)
+    template = Template(template_str)
+    return template.render(Context(context))

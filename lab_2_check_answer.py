@@ -42,7 +42,7 @@ def check_ranges_equal(ws_correct, ws_student, range):
 
     return correct_list == student_list
 
-def check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only):
+def lab_2_check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only):
     student_ws_1 = student_wb[student_wb.get_sheet_names()[0]]
     student_ws_2 = student_wb[student_wb.get_sheet_names()[1]]
     correct_ws_1 = correct_wb[correct_wb.get_sheet_names()[0]]

@@ -6,7 +6,7 @@ import time
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import *
-from utils import randomDate
+from labs_utils import randomDate
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -36,11 +36,13 @@ def set_table_header(ws):
 
     return ws
 
-def create_template(ws, employees, positions, dollar_rate):
+def lab_1_create_template(ws, employees, positions):
     ws = set_table_header(ws)
-
+    dollar_rate = 48
     shuffle_employees = list(employees)
     random.shuffle(shuffle_employees)
+
+    positions = ["Директор", "Менеджер", "Бухгалтер", "Зам. директора", "Секетарь", "Водитель", "Строитель", "Секетарь", "Водитель", "Строитель"]
 
     ws.column_dimensions["A"].width = 5.0
     ws.column_dimensions["B"].width = 28.0
@@ -65,7 +67,7 @@ def create_template(ws, employees, positions, dollar_rate):
             if j == 2:
                 ws.cell(row=pos_i, column=j).value = shuffle_employees[i-1]
             if j == 3:
-                ws.cell(row=pos_i, column=j).value = random.choice(positions)
+                ws.cell(row=pos_i, column=j).value = positions[i-1]
             if j == 4:
                 ws.cell(row=pos_i, column=j).value = randomDate()
                 ws.cell(row=pos_i, column=j).number_format = 'DD/MM/YY'

@@ -8,8 +8,8 @@ from openpyxl import Workbook, load_workbook
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import *
 
-from lab_3_create_template import create_template
-from lab_3_check_answer import check_answer
+from lab_3_create_template import lab_3_create_template
+from lab_3_check_answer import lab_3_check_answer
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -36,7 +36,7 @@ data = [
 template_wb = Workbook()
 template_ws = template_wb.active
 
-template_ws = create_template(template_ws, data)
+template_ws = lab_3_create_template(template_ws, data)
 template_wb.save('lab3_template.xlsx')
 
 correct_wb = load_workbook('lab3_correct.xlsx')
@@ -46,7 +46,7 @@ correct_wb_data_only =  load_workbook('lab3_correct.xlsx', data_only=True)
 student_wb =  load_workbook('lab3_student.xlsx')
 student_wb_data_only =  load_workbook('lab3_correct.xlsx', data_only=True)
 
-result = check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data)
+result = lab_3_check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data)
 
 print json.dumps(result)
 

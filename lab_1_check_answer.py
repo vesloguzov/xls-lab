@@ -7,7 +7,8 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.chart import ScatterChart, Series, Reference
 from openpyxl.chart.reader import reader
 from openpyxl.chart.layout import Layout, ManualLayout
-from utils import range_is_date_format, range_is_money_rub_format, range_is_money_dollar_format, formulas_is_equal
+from labs_utils import range_is_date_format, range_is_money_rub_format, range_is_money_dollar_format, formulas_is_equal
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -338,7 +339,8 @@ def check_ws_have_rule(ws, cells_range, operator, formula_value):
     return False
 
 
-def check_answer(student_wb, student_wb_data_only, employees, dollar_rate):
+def lab_1_check_answer(student_wb, student_wb_data_only, employees):
+    dollar_rate = 48
     student_ws = student_wb[student_wb.get_sheet_names()[0]]
     ws_read_only = student_wb_data_only[student_wb_data_only.get_sheet_names()[0]]
     correct_values_data = calculate_correct_values(student_ws, 'E5:E11', sorted(employees), dollar_rate)
