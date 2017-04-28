@@ -21,7 +21,7 @@ template_wb = Workbook()
 template_ws = template_wb.active
 employees = ["Иванов И.М.", "Коробова П.Н", "Морозов И.Р.", "Петров Г.Т.", "Ромашова П.Т.", "Смирнов С.И.", "Соколова О.С."]
 
-template_ws = lab_1_create_template(template_ws, employees)
+template_ws = lab_1_create_template(template_ws)
 template_wb.save('lab1_template.xlsx')
 
 
@@ -29,6 +29,6 @@ template_wb.save('lab1_template.xlsx')
 student_wb =  load_workbook('lab1_student.xlsx')
 student_wb_data_only =  load_workbook('lab1_student.xlsx', data_only=True)
 
-result = lab_1_check_answer(student_wb, student_wb_data_only, employees)
+result = lab_1_check_answer(student_wb, student_wb_data_only)
 
 print result
