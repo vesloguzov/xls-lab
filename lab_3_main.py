@@ -36,17 +36,17 @@ data = [
 template_wb = Workbook()
 template_ws = template_wb.active
 
-template_ws = lab_3_create_template(template_ws, data)
+template_ws = lab_3_create_template(template_ws)
 template_wb.save('lab3_template.xlsx')
 
 correct_wb = load_workbook('lab3_correct.xlsx')
 correct_wb_data_only =  load_workbook('lab3_correct.xlsx', data_only=True)
 
 # Проверка
-student_wb =  load_workbook('lab3_student.xlsx')
+student_wb =  load_workbook('lab3_correct.xlsx')
 student_wb_data_only =  load_workbook('lab3_correct.xlsx', data_only=True)
 
-result = lab_3_check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only, data)
+result = lab_3_check_answer(correct_wb, correct_wb_data_only, student_wb, student_wb_data_only)
 
 print json.dumps(result)
 
