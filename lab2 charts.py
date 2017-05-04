@@ -21,15 +21,14 @@ from openpyxl.chart import (
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def check_bar_graphic(filename, data_x, data_y):
+
+def check_scatter_graphic(filename, data_x, data_y, num):
     analyze = {}
-    analyze["bar_chart"] = {}
-    analyze["bar_chart"]["errors"] = []
-    analyze["bar_chart"]["data_x"] = {}
-    analyze["bar_chart"]["data_y"] = {}
-    analyze["bar_chart"]["title_x"] = {}
-    analyze["bar_chart"]["title_y"] = {}
-    analyze["bar_chart"]["chart_title"] = {}
+    analyze["errors"] = []
+    analyze["chart_title"] = {}
+    analyze["data_x"] = {}
+    analyze["data_y"] = {}
+    analyze["title_y"] = {}
 
     sourceFile = ZipFile(filename, 'r')
     charts = []; [charts.append(sourceFile.read(ch)) for ch in sourceFile.namelist() if 'charts/chart' in ch]
@@ -44,24 +43,63 @@ def check_bar_graphic(filename, data_x, data_y):
 
             charts_objects.append(l)
         except:
-            analyze["bar_chart"]["errors"].append('График не обнаружен!')
+            analyze["errors"].append('График не обнаружен!')
             return analyze
 
-    obj = charts_objects[0]
-    print obj.title
-    #obj.y_axis.title.tx.rich.p
+    obj = charts_objects[num]
 
-    # obj.x_axis.title = 'SizeXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    # obj.y_axis.title = 'SizeYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY'
+    for chart in charts_objects:
+        if chart.tagname == 'scatterChart':
+            obj = chart
+            break
 
-    # print obj
+    if obj == {}:
+        analyze["errors"].append('График не обнаружен!')
+    else:
+        if obj.title != None:
+            analyze["chart_title"]["message"] = 'Имя графика присвоено'
+            analyze["chart_title"]["status"] = True
+        else:
+            analyze["chart_title"]["message"] = 'Имя графика не присвоено'
+            analyze["chart_title"]["status"] = False
+        try:
+            for s in obj.ser:
+                if data_x in s.xVal.numRef.f.replace(" ", ""):
+                    analyze["data_x"]["message"] = 'Данные для оси x выбраны верно'
+                    analyze["data_x"]["status"] = True
+                else:
+                    analyze["data_x"]["message"] = 'Данные для оси x выбраны неверно'
+                    analyze["data_x"]["status"] = False
+        except:
+            analyze["data_x"]["message"] = 'Данные для оси x выбраны неверно'
+            analyze["data_x"]["status"] = False
 
-    # for s in obj.ser:
-    #    print "Диапазон данных по оси x: ", s.xVal.numRef.f
-    #    print "Диапазон данных по оси y: ", s.yVal.numRef.f
+        try:
+            for s in obj.ser:
+                if data_y in s.yVal.numRef.f.replace(" ", ""):
+                    analyze["data_y"]["message"] = 'Данные для оси y выбраны верно'
+                    analyze["data_y"]["status"] = True
+                else:
+                    analyze["data_y"]["message"] = 'Данные для оси y выбраны неверно'
+                    analyze["data_y"]["status"] = False
+        except:
+            analyze["data_y"]["message"] = 'Данные для оси y выбраны неверно'
+            analyze["data_y"]["status"] = False
 
+        try:
+            if obj.y_axis.title != None:
+                analyze["title_y"]["message"] = 'Подпись осей выполнена'
+                analyze["title_y"]["status"] = True
+            else:
+                analyze["title_y"]["message"] = 'Подпись осей не выполнена'
+                analyze["title_y"]["status"] = False
+        except:
+            analyze["title_y"]["message"] = 'Подпись осей не выполнена'
+            analyze["title_y"]["status"] = False
 
-check_bar_graphic('lab2_correct.xlsx', '$B$5:$B$11', '$I$5:$I$11')
+    return  analyze
+
+print check_scatter_graphic('lab2_correct.xlsx', '$B$5:$B$11', '$I$5:$I$11', 0)
 
 # Лист 1
 # $A$4:$A$28 #Ось x
